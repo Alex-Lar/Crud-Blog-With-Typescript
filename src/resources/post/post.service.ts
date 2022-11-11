@@ -9,10 +9,42 @@ class PostService {
      */
     public async create(title: string, body: string): Promise<Post> {
         try {
-            const post = this.post.create({title, body});
-            return post;
+            return await this.post.create({title, body});
         } catch (e) {
             throw new Error('Unable to create post');
+        }
+    }
+
+    /*
+     * Find post by id
+     */
+    public async read(postId: string): Promise<Post | null> {
+        try {
+            return await this.post.findById(postId);
+        } catch (e) {
+            throw new Error('Unable to find post');
+        }
+    }
+
+    /*
+     * Update post by id
+     */
+    public async update(postId: string, content: Post): Promise<Post | null> {
+        try {
+            return await this.post.findByIdAndUpdate(postId, { ...content });
+        } catch (e) {
+            throw new Error('Unable to update or find post');
+        }
+    }
+
+    /*
+     * Delete post by id
+     */
+    public async delete(postId: string): Promise<Post | null> {
+        try {
+            return await this.post.findByIdAndDelete(postId);
+        } catch (e) {
+            throw new Error('Unable to delete or find post');
         }
     }
 }
