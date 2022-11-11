@@ -1,11 +1,13 @@
 import express, { Application } from 'express';
-import mongoose from 'mongoose';
-import compression from 'compression';
+import path from 'path';
 import cors from 'cors';
 import morgan from 'morgan';
+import helmet from 'helmet';
+import mongoose from 'mongoose';
+import compression from 'compression';
+import methodOverride from 'method-override'
 import Controller from './utils/interfaces/controller.interface';
 import ErrorMiddleware from './middleware/error.middleware';
-import helmet from 'helmet';
 
 class App {
     public express: Application;
@@ -16,12 +18,19 @@ class App {
         this.port = port;
 
         this.initialiseDatabaseConnection();
+        this.initialiseConfiguration();
         this.initialiseMiddleware();
         this.initialiseControllers(controllers);
         this.initialiseErrorHandling();
     }
 
+    private initialiseConfiguration(): void {
+        this.express.set('view engine', 'ejs');
+        this.express.set('views', path.join(__dirname, 'views'));
+    }
+
     private initialiseMiddleware(): void {
+        this.express.use(methodOverride('_method'));
         this.express.use(helmet());
         this.express.use(cors());
         this.express.use(morgan('dev'));
