@@ -30,6 +30,7 @@ class App {
     }
 
     private initialiseMiddleware(): void {
+        this.express.use(express.static(path.join(__dirname, 'public')));
         this.express.use(methodOverride('_method'));
         this.express.use(helmet());
         this.express.use(cors());
