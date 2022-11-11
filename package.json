@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "watch": {
-    "copy-all": {
+    "copy:all": {
       "patterns": [
         "src/public/css",
         "src/views",
@@ -17,10 +17,12 @@
     "start": "node dist/index.js",
     "dev": "tsc-watch --onSuccess \"node dist/index.js\"",
     "build": "tsc",
-    "copy-view": "copyfiles -u 1 src/**/*.ejs dist/",
-    "copy-public": "copyfiles -u 1 src/**/*.css dist/",
-    "copy-all": "npm-run-all --parallel copy-view copy-public",
-    "watch": "npm-watch"
+    "copy:view": "copyfiles -u 1 src/**/*.ejs dist/",
+    "copy:public": "copyfiles -u 1 src/**/*.css dist/",
+    "copy:all": "npm-run-all --parallel copy:view copy:public",
+    "watch": "npm-watch",
+    "tailwind:css": "postcss src/public/styles/tailwind.css -o src/public/styles/style.css",
+    "tailwind:watch": "npx tailwindcss -i ./src/public/css/tailwind.css -o ./dist/public/css/style.css --watch"
   },
   "keywords": [],
   "author": "",
@@ -42,10 +44,12 @@
     "npm-run-all": "^4.1.5",
     "npm-watch": "^0.11.0",
     "prettier": "^2.7.1",
+    "tailwindcss": "^3.2.3",
     "tsc-watch": "^5.0.3",
     "typescript": "^4.8.4"
   },
   "dependencies": {
+    "autoprefixer": "^10.4.13",
     "compression": "^1.7.4",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
