@@ -6,8 +6,8 @@ import helmet from 'helmet';
 import mongoose from 'mongoose';
 import compression from 'compression';
 import methodOverride from 'method-override'
-import Controller from './utils/interfaces/controller.interface';
 import ErrorMiddleware from './middleware/error.middleware';
+import Controller from './utils/interfaces/controller.interface';
 
 class App {
     public express: Application;
@@ -41,7 +41,7 @@ class App {
 
     private initialiseControllers(controllers: Controller[]): void {
         controllers.forEach((controller: Controller) => {
-            this.express.use('/api', controller.router);
+            this.express.use('/', controller.router);
         })
     }
 

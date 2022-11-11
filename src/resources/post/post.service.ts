@@ -27,6 +27,17 @@ class PostService {
     }
 
     /*
+     * Find all posts
+     */
+    public async readAll(): Promise<Post[] | null> {
+        try {
+            return await this.post.find({});
+        } catch (e) {
+            throw new Error('Unable to find post');
+        }
+    }
+
+    /*
      * Update post by id
      */
     public async update(postId: string, content: Post): Promise<Post | null> {

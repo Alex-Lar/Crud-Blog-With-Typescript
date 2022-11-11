@@ -21,9 +21,13 @@ class PostController implements Controller {
             this.create
         );
         this.router.get(
+            `${this.path}`,
+            this.readAll
+        )
+        this.router.get(
             `${this.path}/:id`,
             this.read
-        )
+        );
         this.router.put(
             `${this.path}/:id`,
             validationMiddleware(postValidation.update),
@@ -60,6 +64,19 @@ class PostController implements Controller {
             res.status(200).json({ foundPost });
         } catch (e) {
             next(new HttpException(400, 'Cannot find post'));
+        }
+    }
+
+    private readAll = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<Response | void> => {
+        try {   
+            const posts = await this.PostService.readAll();
+            res.render('posts/posts', { posts });
+        } catch (e) {
+            next(new HttpException(400, 'Cannot find posts'));
         }
     }
 
