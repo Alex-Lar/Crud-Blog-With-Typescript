@@ -10,13 +10,13 @@
 <body>
     <div class="container mx-auto w-8/12 py-3">
         <h1 class="text-4xl font-semibold text-center my-5">All Posts</h1>
-
+        <a class="text-blue-400 hover:text-blue-700 ease-linear transition-all duration-150" href="/posts/new">Create new post</a>
         <% for (let post of posts) { %>
             <article class="py-3 px-5 my-5 border-2 rounded border-blue-100 border-solid">
                 <h2 class="text-xl font-semibold mb-2"><%= post.title %></h2>
                 <hr>
                 <p class="mt-3 mb-2 text-slate-700"><%= post.body %></p>
-                <a class="text-blue-500" href="/posts/<%=post._id%>">View post</a>
+                <a class="font-semibold uppercase  text-xs text-blue-400 hover:text-blue-700 ease-linear transition-all duration-150" href="/posts/<%=post._id%>">View post</a>
             </article>
         <% } %>
     </div>

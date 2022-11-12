@@ -15,49 +15,27 @@ class PostController implements Controller {
     }
 
     private initialiseRoutes(): void {
-        this.router.post(
-            `${this.path}`,
-            validationMiddleware(postValidation.create),
-            this.create
-        );
-        this.router.get(
-            `${this.path}`,
-            this.readAll
-        )
-        this.router.get(
-            `${this.path}/:id`,
-            this.read
-        );
-        this.router.put(
-            `${this.path}/:id`,
-            validationMiddleware(postValidation.update),
-            this.update
-        );
-        this.router.delete(
-            `${this.path}/:id`,
-            this.delete
-        );
+        this.router.route(`${this.path}`)
+            .get(this.renderPosts)
+            .post(validationMiddleware(postValidation.create),this.createPost)
+
+        this.router.route(`${this.path}/new`)
+            .get(this.renderFormNew)
+
+        this.router.route(`${this.path}/:id`)
+            .get(this.renderPost)
+            .delete(this.deletePost)
+            .put(validationMiddleware(postValidation.create),this.updatePost)
+
+        this.router.route(`${this.path}/:id/edit`)
+            .get(this.renderFormEdit)
     }
 
-    private create = async (
+    private renderPost = async (
         req: Request,
         res: Response,
         next: NextFunction
-    ): Promise<Response | void> => {
-        try {
-            const { title, body } = req.body;
-            const post = await this.PostService.create(title, body);
-            res.status(201).json({ post });
-        } catch (e) {
-            next(new HttpException(400, 'Cannot create post'));
-        }
-    }
-
-    private read = async (
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<Response | void> => {
+    ): Promise<void> => {
         try {   
             const postId = req.params.id;
             const post = await this.PostService.read(postId);
@@ -67,11 +45,11 @@ class PostController implements Controller {
         }
     }
 
-    private readAll = async (
+    private renderPosts = async (
         req: Request,
         res: Response,
         next: NextFunction
-    ): Promise<Response | void> => {
+    ): Promise<void> => {
         try {   
             const posts = await this.PostService.readAll();
             res.render('posts/index', { posts });
@@ -80,26 +58,67 @@ class PostController implements Controller {
         }
     }
 
-    private update = async (
+    private renderFormNew = (
         req: Request,
         res: Response,
         next: NextFunction
-    ): Promise<Response | void> => {
+    ): void => {
+        try {
+            res.render('posts/new');   
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    private renderFormEdit = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<void> => {
+        try {
+            const postId = req.params.id;
+            const post = await this.PostService.read(postId);
+            res.render('posts/edit', { post });   
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    private createPost = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<void> => {
+        try {
+            const { title, body } = req.body;
+            const post = await this.PostService.create(title, body);
+            res.redirect(`/posts/${post._id}`);
+        } catch (e) {
+            next(new HttpException(400, 'Cannot create post'));
+        }
+    }
+
+    private updatePost = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<void> => {
         try {
             const postId = req.params.id;
             const content = req.body;
             const updatedPost = await this.PostService.update(postId, content);
-            res.status(201).json({ updatedPost });
+            if (updatedPost) return res.redirect(`/posts/${updatedPost._id}`);
+            res.redirect('/posts');
         } catch (error) {
             next(new HttpException(400, 'Cannot update post'));
         }
     }
 
-    private delete = async (
+    private deletePost = async (
         req: Request,
         res: Response,
         next: NextFunction
-    ): Promise<Response | void> => {
+    ): Promise<void> => {
         try {
             const postId = req.params.id;
             const deletedPost = await this.PostService.delete(postId);
