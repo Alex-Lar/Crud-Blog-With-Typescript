@@ -4,13 +4,12 @@
   "description": "",
   "main": "index.js",
   "watch": {
-    "copy:all": {
+    "copy:view": {
       "patterns": [
-        "src/public/css",
         "src/views",
         "src/views/posts"
       ],
-      "extensions": "css,ejs"
+      "extensions": "ejs"
     }
   },
   "scripts": {
@@ -21,7 +20,6 @@
     "copy:public": "copyfiles -u 1 src/**/*.css dist/",
     "copy:all": "npm-run-all --parallel copy:view copy:public",
     "watch": "npm-watch",
-    "tailwind:css": "postcss src/public/styles/tailwind.css -o src/public/styles/style.css",
     "tailwind:watch": "npx tailwindcss -i ./src/public/css/tailwind.css -o ./dist/public/css/style.css --watch"
   },
   "keywords": [],

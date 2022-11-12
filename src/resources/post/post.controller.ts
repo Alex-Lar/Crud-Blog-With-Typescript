@@ -60,8 +60,8 @@ class PostController implements Controller {
     ): Promise<Response | void> => {
         try {   
             const postId = req.params.id;
-            const foundPost = await this.PostService.read(postId);
-            res.status(200).json({ foundPost });
+            const post = await this.PostService.read(postId);
+            res.render('posts/post', { post })
         } catch (e) {
             next(new HttpException(400, 'Cannot find post'));
         }
@@ -74,7 +74,7 @@ class PostController implements Controller {
     ): Promise<Response | void> => {
         try {   
             const posts = await this.PostService.readAll();
-            res.render('posts/posts', { posts });
+            res.render('posts/index', { posts });
         } catch (e) {
             next(new HttpException(400, 'Cannot find posts'));
         }
@@ -103,7 +103,8 @@ class PostController implements Controller {
         try {
             const postId = req.params.id;
             const deletedPost = await this.PostService.delete(postId);
-            res.status(204).json({ deletedPost });
+            console.log(`Post: "${deletedPost ? deletedPost.title : 'NULL'}" - is deleted`)
+            res.redirect('/posts');
         } catch (e) {
             next(new HttpException(400, 'Cannot delete post'));
         }

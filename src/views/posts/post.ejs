@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/style.css">
+    <title>My Posts</title>
+</head>
+
+<body>
+
+    <div class="container mx-auto w-8/12 py-3">
+        <h1 class="text-4xl font-semibold text-center my-5">Post</h1>
+
+        <a class="text-blue-400 hover:text-blue-700 ease-linear transition-all duration-150" href="/posts">Back</a>
+        <article class="py-3 px-5 my-5 border-2 rounded border-blue-100 border-solid">
+            <div class="flex mb-2 justify-between items-center">
+                <h2 class="text-xl font-semibold"><%= post.title %></h2>
+                
+                <form class="p-0 m-0" action="<%=post._id%>?_method=DELETE" method="post">
+                    <button class="text-red-400 hover:text-red-700 background-transparent font-semibold uppercase  text-xs outline-none focus:outline-none ease-linear transition-all duration-150" type="submit">Delete</button>
+                </form>
+            </div>
+            <hr>
+            <p class="mt-3 mb-2 text-slate-700">
+                <%= post.body %>
+            </p>
+        </article>
+
+    </div>
+</body>
+
+</html>
